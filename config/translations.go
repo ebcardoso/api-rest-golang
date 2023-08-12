@@ -13,6 +13,26 @@ var (
 )
 
 type Translations struct {
+	Auth struct {
+		Signup struct {
+			Errors struct {
+				AlreadyExists     string `yaml:"already_exists"`
+				PasswordDifferent string `yaml:"password_different"`
+				SaveUser          string `yaml:"save_user"`
+			} `yaml:"errors"`
+		} `yaml:"signup"`
+	} `yaml:"auth"`
+	Users struct {
+		Errors struct {
+			NotFound string `yaml:"not_found"`
+		} `yaml:"errors"`
+		Create struct {
+			Errors string `yaml:"errors"`
+		} `yaml:"create"`
+		Load struct {
+			Errors string `yaml:"errors"`
+		} `yaml:"load"`
+	} `yaml:"users"`
 }
 
 func LoadTranslations(fileYml string) (*Translations, error) {

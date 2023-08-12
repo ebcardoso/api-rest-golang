@@ -1,0 +1,14 @@
+auth:
+  signup:
+    success : 'User registered successfully'
+    errors:
+      already_exists: 'This :email already exists'
+      password_different: "Params :password and :password_confirmation don't match"
+      save_user: 'Failure to register user'
+user:
+  errors:
+    not_found: 'User not found'
+  load:
+    errors: 'Error to load user'
+  create:
+    errors: 'Error to create user'
