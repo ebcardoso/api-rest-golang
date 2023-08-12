@@ -1,4 +1,7 @@
 auth:
+  protector:
+    not_auth: "User not authenticated"
+    token_required: "Token is required"
   signup:
     success : 'User registered successfully'
     errors:

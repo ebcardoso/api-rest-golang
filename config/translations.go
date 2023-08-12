@@ -14,6 +14,10 @@ var (
 
 type Translations struct {
 	Auth struct {
+		Protector struct {
+			NotAuth       string `yaml:"not_auth"`
+			TokenRequired string `yaml:"token_required"`
+		} `yaml:"protector"`
 		Signup struct {
 			Errors struct {
 				AlreadyExists     string `yaml:"already_exists"`
