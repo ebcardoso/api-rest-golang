@@ -13,7 +13,7 @@ func main() {
 	flag.Parse()
 
 	//Creating new server
-	server, err := server.NewServer(*port)
+	server, err := server.NewServer(*port, ".env")
 	if err != nil {
 		log.Fatal(err)
 		return
