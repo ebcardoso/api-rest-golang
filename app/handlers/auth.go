@@ -77,3 +77,7 @@ func (api *Auth) Signup(w http.ResponseWriter, r *http.Request) {
 
 	response.JsonRes(w, result, http.StatusCreated)
 }
+
+func (api *Auth) CheckToken(w http.ResponseWriter, r *http.Request) {
+
+}

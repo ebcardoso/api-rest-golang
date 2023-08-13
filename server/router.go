@@ -24,6 +24,7 @@ func GetRoutes(configs *config.Config) *chi.Mux {
 	router.Use(middleware.Timeout(60 * time.Second))
 	router.Group(func(protected chi.Router) {
 		protected.Use(protector.Protect)
+		protected.Post(V1+"auth/check_token", auth.CheckToken)
 	})
 	router.Post(V1+"auth/signup", auth.Signup)
 
