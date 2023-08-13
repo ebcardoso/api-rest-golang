@@ -8,10 +8,20 @@ auth:
       already_exists: 'This :email already exists'
       password_different: "Params :password and :password_confirmation don't match"
       save_user: 'Failure to register user'
-user:
+  signin:
+    success: 'User authenticated succesfully'
+    invalid: 'User or password invalid'
+users:
   errors:
     not_found: 'User not found'
+  index:
+    errors: 'Error to fetch users'
   load:
     errors: 'Error to load user'
   create:
     errors: 'Error to create user'
+  update:
+    errors: 'Error to update user'
+  destroy:
+    success: 'User deleted successfully'
+    errors: 'Error to delete user'

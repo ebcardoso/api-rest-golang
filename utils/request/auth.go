@@ -7,3 +7,9 @@ type SignupReq struct {
 	Password             string `json:"password,omitempty"`
 	PasswordConfirmation string `json:"password_confirmation,omitempty"`
 }
+
+// api/v1/auth/signin
+type SigninReq struct {
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
+}

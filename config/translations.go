@@ -25,6 +25,10 @@ type Translations struct {
 				SaveUser          string `yaml:"save_user"`
 			} `yaml:"errors"`
 		} `yaml:"signup"`
+		Signin struct {
+			Success string `yaml:"success"`
+			Invalid string `yaml:"invalid"`
+		} `yaml:"signin"`
 	} `yaml:"auth"`
 	Users struct {
 		Errors struct {

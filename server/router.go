@@ -27,6 +27,7 @@ func GetRoutes(configs *config.Config) *chi.Mux {
 		protected.Post(V1+"auth/check_token", auth.CheckToken)
 	})
 	router.Post(V1+"auth/signup", auth.Signup)
+	router.Post(V1+"auth/signin", auth.Signin)
 
 	return router
 }

@@ -2,6 +2,7 @@ package types
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -23,5 +24,17 @@ func MapUserDB(user UserDB) User {
 		ID:    user.ID.Hex(),
 		Name:  user.Name,
 		Email: user.Email,
+	}
+}
+
+func CheckPassword(user UserDB, password string) bool {
+	currentPassword := []byte(user.Password)
+	candidate := []byte(password)
+
+	err := bcrypt.CompareHashAndPassword(currentPassword, candidate)
+	if err != nil {
+		return false
+	} else {
+		return true
 	}
 }
