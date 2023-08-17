@@ -15,6 +15,7 @@ var (
 	ErrUserNotFound error
 	ErrUserGet      error
 	ErrUserCreate   error
+	ErrUserDestroy  error
 )
 
 type Users struct {
@@ -25,6 +26,7 @@ func NewRepositoryUsers(configs *config.Config) *Users {
 	ErrUserNotFound = errors.New(configs.Translations.Users.Errors.NotFound)
 	ErrUserGet = errors.New(configs.Translations.Users.Load.Errors)
 	ErrUserCreate = errors.New(configs.Translations.Users.Create.Errors)
+	ErrUserDestroy = errors.New(configs.Translations.Users.Destroy.Errors)
 
 	return &Users{
 		collection: configs.Database.Collection("users"),
@@ -52,4 +54,15 @@ func (rep *Users) GetUserByEmail(email string) (types.UserDB, error) {
 		return types.UserDB{}, ErrUserGet
 	}
 	return result, nil
+}
+
+func (rep *Users) DestroyUser(id primitive.ObjectID) error {
+	result, err := rep.collection.DeleteOne(context.Background(), bson.M{"_id": id})
+	if err != nil {
+		return ErrUserDestroy
+	}
+	if result.DeletedCount == 0 {
+		return ErrUserNotFound
+	}
+	return nil
 }

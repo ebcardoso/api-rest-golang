@@ -40,7 +40,14 @@ type Translations struct {
 		Load struct {
 			Errors string `yaml:"errors"`
 		} `yaml:"load"`
+		Destroy struct {
+			Success string `yaml:"success"`
+			Errors  string `yaml:"errors"`
+		}
 	} `yaml:"users"`
+	Errors struct {
+		ParseId string `yaml:"parse_id"`
+	} `yaml:"errors"`
 }
 
 func LoadTranslations(fileYml string) (*Translations, error) {

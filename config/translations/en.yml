@@ -25,3 +25,5 @@ users:
   destroy:
     success: 'User deleted successfully'
     errors: 'Error to delete user'
+errors:
+  parse_id: 'Invalid param id'
