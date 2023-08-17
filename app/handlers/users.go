@@ -23,6 +23,32 @@ func NewUsers(configs *config.Config) *Users {
 	}
 }
 
+func (api *Users) GetUserByID(w http.ResponseWriter, r *http.Request) {
+	output := make(map[string]interface{})
+
+	id := chi.URLParam(r, "id")
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.ParseId
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
+
+	result, err := api.repository.GetUserByID(objID)
+	if err != nil {
+		var status int
+		if errors.Is(err, repository.ErrUserNotFound) {
+			status = http.StatusNotFound
+		} else {
+			status = http.StatusInternalServerError
+		}
+		output["message"] = err.Error()
+		response.JsonRes(w, output, status)
+		return
+	}
+	response.JsonRes(w, result, http.StatusOK)
+}
+
 func (api *Users) DestroyUser(w http.ResponseWriter, r *http.Request) {
 	output := make(map[string]interface{})
 

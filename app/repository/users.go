@@ -42,6 +42,20 @@ func (rep *Users) CreateUser(input types.UserDB) (types.User, error) {
 	return types.MapUserDB(input), nil
 }
 
+func (rep *Users) GetUserByID(id primitive.ObjectID) (types.User, error) {
+	var result types.UserDB
+	err := rep.collection.
+		FindOne(context.Background(), bson.M{"_id": id}).
+		Decode(&result)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return types.User{}, ErrUserNotFound
+		}
+		return types.User{}, ErrUserGet
+	}
+	return types.MapUserDB(result), nil
+}
+
 func (rep *Users) GetUserByEmail(email string) (types.UserDB, error) {
 	var result types.UserDB
 	err := rep.collection.
