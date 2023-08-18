@@ -40,13 +40,17 @@ type Translations struct {
 		Load struct {
 			Errors string `yaml:"errors"`
 		} `yaml:"load"`
+		Update struct {
+			Errors string `yaml:"errors"`
+		} `yaml:"update"`
 		Destroy struct {
 			Success string `yaml:"success"`
 			Errors  string `yaml:"errors"`
 		}
 	} `yaml:"users"`
 	Errors struct {
-		ParseId string `yaml:"parse_id"`
+		InvalidParams string `yaml:"invalid_params"`
+		ParseId       string `yaml:"parse_id"`
 	} `yaml:"errors"`
 }
 

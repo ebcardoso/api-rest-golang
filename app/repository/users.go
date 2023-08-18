@@ -15,6 +15,7 @@ var (
 	ErrUserNotFound error
 	ErrUserGet      error
 	ErrUserCreate   error
+	ErrUserUpdate   error
 	ErrUserDestroy  error
 )
 
@@ -26,6 +27,7 @@ func NewRepositoryUsers(configs *config.Config) *Users {
 	ErrUserNotFound = errors.New(configs.Translations.Users.Errors.NotFound)
 	ErrUserGet = errors.New(configs.Translations.Users.Load.Errors)
 	ErrUserCreate = errors.New(configs.Translations.Users.Create.Errors)
+	ErrUserUpdate = errors.New(configs.Translations.Users.Update.Errors)
 	ErrUserDestroy = errors.New(configs.Translations.Users.Destroy.Errors)
 
 	return &Users{
@@ -68,6 +70,22 @@ func (rep *Users) GetUserByEmail(email string) (types.UserDB, error) {
 		return types.UserDB{}, ErrUserGet
 	}
 	return result, nil
+}
+
+func (rep *Users) UpdateUser(id primitive.ObjectID, input types.UserDB) error {
+	object := bson.M{}
+	if input.Name != "" {
+		object["name"] = input.Name
+	}
+	result, err := rep.collection.
+		UpdateOne(context.Background(), bson.M{"_id": id}, bson.M{"$set": object})
+	if err != nil {
+		return ErrUserUpdate
+	}
+	if result.MatchedCount == 0 {
+		return ErrUserNotFound
+	}
+	return nil
 }
 
 func (rep *Users) DestroyUser(id primitive.ObjectID) error {

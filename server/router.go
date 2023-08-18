@@ -27,6 +27,7 @@ func GetRoutes(configs *config.Config) *chi.Mux {
 		protected.Use(protector.Protect)
 		protected.Post(V1+"auth/check_token", auth.CheckToken)
 		protected.Get(V1+"users/{id}", users.GetUserByID)
+		protected.Patch(V1+"users/{id}", users.UpdateUser)
 		protected.Delete(V1+"users/{id}", users.DestroyUser)
 	})
 	router.Post(V1+"auth/signup", auth.Signup)
