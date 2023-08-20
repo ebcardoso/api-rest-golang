@@ -14,7 +14,9 @@ auth:
 users:
   errors:
     not_found: 'User not found'
-  index:
+  list:
+    errors: 'Error to list users'
+  fetch:
     errors: 'Error to fetch users'
   load:
     errors: 'Error to load user'

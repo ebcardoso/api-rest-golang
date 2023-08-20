@@ -13,6 +13,8 @@ import (
 
 var (
 	ErrUserNotFound error
+	ErrUserList     error
+	ErrUserFetch    error
 	ErrUserGet      error
 	ErrUserCreate   error
 	ErrUserUpdate   error
@@ -25,6 +27,8 @@ type Users struct {
 
 func NewRepositoryUsers(configs *config.Config) *Users {
 	ErrUserNotFound = errors.New(configs.Translations.Users.Errors.NotFound)
+	ErrUserList = errors.New(configs.Translations.Users.List.Errors)
+	ErrUserFetch = errors.New(configs.Translations.Users.Fetch.Errors)
 	ErrUserGet = errors.New(configs.Translations.Users.Load.Errors)
 	ErrUserCreate = errors.New(configs.Translations.Users.Create.Errors)
 	ErrUserUpdate = errors.New(configs.Translations.Users.Update.Errors)
@@ -33,6 +37,26 @@ func NewRepositoryUsers(configs *config.Config) *Users {
 	return &Users{
 		collection: configs.Database.Collection("users"),
 	}
+}
+
+func (rep *Users) ListUsers() ([]types.User, error) {
+	items := []types.User{}
+
+	result, err := rep.collection.Find(context.Background(), bson.M{})
+	if err != nil {
+		return nil, ErrUserList
+	}
+
+	defer result.Close(context.Background())
+
+	for result.Next(context.Background()) {
+		var item types.UserDB
+		if err := result.Decode(&item); err != nil {
+			return nil, ErrUserFetch
+		}
+		items = append(items, types.MapUserDB(item))
+	}
+	return items, nil
 }
 
 func (rep *Users) CreateUser(input types.UserDB) (types.User, error) {

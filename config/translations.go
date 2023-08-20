@@ -37,6 +37,12 @@ type Translations struct {
 		Create struct {
 			Errors string `yaml:"errors"`
 		} `yaml:"create"`
+		List struct {
+			Errors string `yaml:"errors"`
+		} `yaml:"list"`
+		Fetch struct {
+			Errors string `yaml:"errors"`
+		} `yaml:"fetch"`
 		Load struct {
 			Errors string `yaml:"errors"`
 		} `yaml:"load"`

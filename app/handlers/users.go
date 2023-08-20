@@ -25,6 +25,20 @@ func NewUsers(configs *config.Config) *Users {
 	}
 }
 
+func (api *Users) GetListUsers(w http.ResponseWriter, r *http.Request) {
+	output := make(map[string]interface{})
+
+	items, err := api.repository.ListUsers()
+	if err != nil {
+		output["message"] = err.Error()
+		response.JsonRes(w, output, http.StatusInternalServerError)
+		return
+	}
+
+	output["content"] = items
+	response.JsonRes(w, output, http.StatusOK)
+}
+
 func (api *Users) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	output := make(map[string]interface{})
 
