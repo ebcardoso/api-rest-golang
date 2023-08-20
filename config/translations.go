@@ -53,6 +53,14 @@ type Translations struct {
 			Success string `yaml:"success"`
 			Errors  string `yaml:"errors"`
 		}
+		Block struct {
+			Success string `yaml:"success"`
+			Errors  string `yaml:"errors"`
+		} `yaml:"block"`
+		Unblock struct {
+			Success string `yaml:"success"`
+			Errors  string `yaml:"errors"`
+		} `yaml:"unblock"`
 	} `yaml:"users"`
 	Errors struct {
 		InvalidParams string `yaml:"invalid_params"`

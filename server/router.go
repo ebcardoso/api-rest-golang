@@ -30,6 +30,8 @@ func GetRoutes(configs *config.Config) *chi.Mux {
 		protected.Get(V1+"users/{id}", users.GetUserByID)
 		protected.Patch(V1+"users/{id}", users.UpdateUser)
 		protected.Delete(V1+"users/{id}", users.DestroyUser)
+		protected.Post(V1+"users/{id}/block", users.Block)
+		protected.Post(V1+"users/{id}/unblock", users.Unblock)
 	})
 	router.Post(V1+"auth/signup", auth.Signup)
 	router.Post(V1+"auth/signin", auth.Signin)

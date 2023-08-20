@@ -130,3 +130,65 @@ func (api *Users) DestroyUser(w http.ResponseWriter, r *http.Request) {
 	output["message"] = api.configs.Translations.Users.Destroy.Success
 	response.JsonRes(w, output, http.StatusOK)
 }
+
+func (api *Users) Block(w http.ResponseWriter, r *http.Request) {
+	output := make(map[string]interface{})
+
+	//Parsing ID
+	id := chi.URLParam(r, "id")
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.ParseId
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
+
+	//Persisting the Block
+	err = api.repository.BlockOrUnlockUser(objID, true)
+	if err != nil {
+		var status int
+		if errors.Is(err, repository.ErrUserNotFound) {
+			status = http.StatusNotFound
+		} else {
+			status = http.StatusInternalServerError
+		}
+		output["message"] = err.Error()
+		response.JsonRes(w, output, status)
+		return
+	}
+
+	//Success Response
+	output["message"] = api.configs.Translations.Users.Block.Success
+	response.JsonRes(w, output, http.StatusOK)
+}
+
+func (api *Users) Unblock(w http.ResponseWriter, r *http.Request) {
+	output := make(map[string]interface{})
+
+	//Parsing ID
+	id := chi.URLParam(r, "id")
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.ParseId
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
+
+	//Persisting the Block
+	err = api.repository.BlockOrUnlockUser(objID, false)
+	if err != nil {
+		var status int
+		if errors.Is(err, repository.ErrUserNotFound) {
+			status = http.StatusNotFound
+		} else {
+			status = http.StatusInternalServerError
+		}
+		output["message"] = err.Error()
+		response.JsonRes(w, output, status)
+		return
+	}
+
+	//Success Response
+	output["message"] = api.configs.Translations.Users.Unblock.Success
+	response.JsonRes(w, output, http.StatusOK)
+}

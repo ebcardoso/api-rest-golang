@@ -27,6 +27,12 @@ users:
   destroy:
     success: 'User deleted successfully'
     errors: 'Error to delete user'
+  block:
+    success: 'User blocked successfully'
+    errors: 'Error to block user'
+  unblock:
+    success: 'User unblocked successfully'
+    errors: 'Error to unblock user'
 errors:
   invalid_params: 'Invalid Params'
   parse_id: 'Invalid param id'

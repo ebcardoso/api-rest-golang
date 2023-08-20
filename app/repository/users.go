@@ -19,6 +19,8 @@ var (
 	ErrUserCreate   error
 	ErrUserUpdate   error
 	ErrUserDestroy  error
+	ErrUserBlock    error
+	ErrUserUnblock  error
 )
 
 type Users struct {
@@ -33,6 +35,8 @@ func NewRepositoryUsers(configs *config.Config) *Users {
 	ErrUserCreate = errors.New(configs.Translations.Users.Create.Errors)
 	ErrUserUpdate = errors.New(configs.Translations.Users.Update.Errors)
 	ErrUserDestroy = errors.New(configs.Translations.Users.Destroy.Errors)
+	ErrUserBlock = errors.New(configs.Translations.Users.Block.Errors)
+	ErrUserUnblock = errors.New(configs.Translations.Users.Unblock.Errors)
 
 	return &Users{
 		collection: configs.Database.Collection("users"),
@@ -118,6 +122,25 @@ func (rep *Users) DestroyUser(id primitive.ObjectID) error {
 		return ErrUserDestroy
 	}
 	if result.DeletedCount == 0 {
+		return ErrUserNotFound
+	}
+	return nil
+}
+
+func (rep *Users) BlockOrUnlockUser(id primitive.ObjectID, isBlocked bool) error {
+	object := bson.M{}
+	object["isBlocked"] = isBlocked
+
+	result, err := rep.collection.
+		UpdateOne(context.Background(), bson.M{"_id": id}, bson.M{"$set": object})
+	if err != nil {
+		if isBlocked {
+			return ErrUserBlock
+		} else {
+			return ErrUserUnblock
+		}
+	}
+	if result.MatchedCount == 0 {
 		return ErrUserNotFound
 	}
 	return nil
