@@ -99,10 +99,17 @@ func (api *Auth) Signin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Check if the user is blocked
+	if user.IsBlocked {
+		output["message"] = api.configs.Translations.Auth.Signin.UserBlocked
+		response.JsonRes(w, output, http.StatusUnauthorized)
+		return
+	}
+
 	//Call check password
 	checkPassword := types.CheckPassword(user, params.Password)
 	if !checkPassword {
-		output["message"] = "wrong password"
+		output["message"] = api.configs.Translations.Auth.Signin.Invalid
 		response.JsonRes(w, output, http.StatusUnauthorized)
 		return
 	}

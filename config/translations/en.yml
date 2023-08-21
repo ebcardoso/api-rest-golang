@@ -11,6 +11,7 @@ auth:
   signin:
     success: 'User authenticated succesfully'
     invalid: 'User or password invalid'
+    user_blocked: 'User is blocked'
 users:
   errors:
     not_found: 'User not found'

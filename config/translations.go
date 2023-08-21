@@ -26,8 +26,9 @@ type Translations struct {
 			} `yaml:"errors"`
 		} `yaml:"signup"`
 		Signin struct {
-			Success string `yaml:"success"`
-			Invalid string `yaml:"invalid"`
+			Success     string `yaml:"success"`
+			Invalid     string `yaml:"invalid"`
+			UserBlocked string `yaml:"user_blocked"`
 		} `yaml:"signin"`
 	} `yaml:"auth"`
 	Users struct {
