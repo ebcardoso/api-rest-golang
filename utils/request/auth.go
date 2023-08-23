@@ -13,3 +13,8 @@ type SigninReq struct {
 	Email    string `json:"email,omitempty"`
 	Password string `json:"password,omitempty"`
 }
+
+// api/v1/auth/forgot_password_token
+type ForgotPasswordReq struct {
+	Email string `json:"email,omitempty"`
+}

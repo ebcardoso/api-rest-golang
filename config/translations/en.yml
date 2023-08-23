@@ -12,6 +12,10 @@ auth:
     success: 'User authenticated succesfully'
     invalid: 'User or password invalid'
     user_blocked: 'User is blocked'
+  forgot_password_token:
+    success: 'A token was sent by email to reset the password'
+    errors:
+      default: 'Failure to generate token'
 users:
   errors:
     not_found: 'User not found'

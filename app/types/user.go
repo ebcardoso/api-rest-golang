@@ -14,11 +14,12 @@ type User struct {
 }
 
 type UserDB struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	Name      string             `bson:"name,omitempty"`
-	Email     string             `bson:"email,omitempty"`
-	IsBlocked bool               `bson:"isBlocked,omitempty"`
-	Password  string             `bson:"password,omitempty"`
+	ID                 primitive.ObjectID `bson:"_id,omitempty"`
+	Name               string             `bson:"name,omitempty"`
+	Email              string             `bson:"email,omitempty"`
+	IsBlocked          bool               `bson:"isBlocked,omitempty"`
+	TokenResetPassword string             `bson:"tokenResetPassword,omitempty"`
+	Password           string             `bson:"password,omitempty"`
 }
 
 func MapUserDB(user UserDB) User {

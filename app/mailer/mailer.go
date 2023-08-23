@@ -1,6 +1,8 @@
 package mailer
 
 import (
+	"fmt"
+
 	"github.com/ebcardoso/api-rest-golang/config"
 	"github.com/go-mail/mail"
 )
@@ -13,6 +15,13 @@ func NewMailSender(configs *config.Config) *MailSender {
 	return &MailSender{
 		configs: configs,
 	}
+}
+
+func (ms *MailSender) TokenForgotPassword(email string, token string) {
+	subject := "Forgot Password Token"
+	body := fmt.Sprintf("<h1>Use this token to recover the password:</h1><br/><h2>%s</h2>", token)
+
+	ms.deliverMail(email, subject, body)
 }
 
 // Delivering Email

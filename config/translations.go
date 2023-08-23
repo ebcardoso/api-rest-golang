@@ -30,6 +30,12 @@ type Translations struct {
 			Invalid     string `yaml:"invalid"`
 			UserBlocked string `yaml:"user_blocked"`
 		} `yaml:"signin"`
+		ForgotPasswordToken struct {
+			Success string `yaml:"success"`
+			Errors  struct {
+				Default string `yaml:"default"`
+			} `yaml:"errors"`
+		} `yaml:"forgot_password_token"`
 	} `yaml:"auth"`
 	Users struct {
 		Errors struct {

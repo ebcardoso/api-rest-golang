@@ -3,8 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"math/rand"
 	"net/http"
 
+	"github.com/ebcardoso/api-rest-golang/app/mailer"
 	"github.com/ebcardoso/api-rest-golang/app/repository"
 	"github.com/ebcardoso/api-rest-golang/app/types"
 	"github.com/ebcardoso/api-rest-golang/config"
@@ -127,4 +130,48 @@ func (api *Auth) Signin(w http.ResponseWriter, r *http.Request) {
 
 func (api *Auth) CheckToken(w http.ResponseWriter, r *http.Request) {
 
+}
+
+func (api *Auth) ForgotPasswordToken(w http.ResponseWriter, r *http.Request) {
+	output := make(map[string]interface{})
+
+	//Post Params
+	var params request.ForgotPasswordReq
+	json.NewDecoder(r.Body).Decode(&params)
+
+	//Find user on DB
+	user, err := api.repository.GetUserByEmail(params.Email)
+	if err != nil {
+		var status int
+		if errors.Is(err, repository.ErrUserNotFound) {
+			status = http.StatusNotFound
+		} else {
+			status = http.StatusInternalServerError
+		}
+		output["message"] = err.Error()
+		response.JsonRes(w, output, status)
+		return
+	}
+
+	//Generating Token
+	token := fmt.Sprintf("%d", (100000 + rand.Intn(899999)))
+
+	//Persisting the token
+	userWithToken := types.UserDB{
+		TokenResetPassword: token,
+	}
+	err = api.repository.UpdateUser(user.ID, userWithToken)
+	if err != nil {
+		output["message"] = api.configs.Translations.Auth.ForgotPasswordToken.Errors.Default
+		response.JsonRes(w, output, http.StatusInternalServerError)
+		return
+	}
+
+	//Sending token by email
+	ms := mailer.NewMailSender(api.configs)
+	go ms.TokenForgotPassword(user.Email, token)
+
+	//Success Response
+	output["message"] = api.configs.Translations.Auth.ForgotPasswordToken.Success
+	response.JsonRes(w, output, http.StatusOK)
 }
