@@ -10,6 +10,11 @@ require (
 )
 
 require (
+	github.com/go-mail/mail v2.3.1+incompatible // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+)
+
+require (
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/joho/godotenv v1.5.1
