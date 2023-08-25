@@ -16,6 +16,11 @@ auth:
     success: 'A token was sent by email to reset the password'
     errors:
       default: 'Failure to generate token'
+  reset_password_confirm:
+    success: 'Password reset successfully'
+    errors:
+      invalid_token: 'Token invalid'
+      default: 'Failure to reset password'
 users:
   errors:
     not_found: 'User not found'

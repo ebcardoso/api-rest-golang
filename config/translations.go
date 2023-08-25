@@ -36,6 +36,13 @@ type Translations struct {
 				Default string `yaml:"default"`
 			} `yaml:"errors"`
 		} `yaml:"forgot_password_token"`
+		ResetPasswordConfirm struct {
+			Success string `yaml:"success"`
+			Errors  struct {
+				InvalidToken string `yaml:"invalid_token"`
+				Default      string `yaml:"default"`
+			} `yaml:"errors"`
+		} `yaml:"reset_password_confirm"`
 	} `yaml:"auth"`
 	Users struct {
 		Errors struct {

@@ -18,3 +18,11 @@ type SigninReq struct {
 type ForgotPasswordReq struct {
 	Email string `json:"email,omitempty"`
 }
+
+// api/v1/auth/reset_password_confirm
+type ResetPasswordReq struct {
+	Email                string `json:"email,omitempty"`
+	Token                string `json:"token,omitempty"`
+	Password             string `json:"password,omitempty"`
+	PasswordConfirmation string `json:"password_confirmation,omitempty"`
+}

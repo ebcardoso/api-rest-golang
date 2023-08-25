@@ -108,6 +108,9 @@ func (rep *Users) UpdateUser(id primitive.ObjectID, input types.UserDB) error {
 	if input.TokenResetPassword != "" {
 		object["tokenResetPassword"] = input.TokenResetPassword
 	}
+	if input.Password != "" {
+		object["password"] = input.Password
+	}
 	result, err := rep.collection.
 		UpdateOne(context.Background(), bson.M{"_id": id}, bson.M{"$set": object})
 	if err != nil {
