@@ -13,6 +13,7 @@ import (
 	"github.com/ebcardoso/api-rest-golang/config"
 	"github.com/ebcardoso/api-rest-golang/utils"
 	"github.com/ebcardoso/api-rest-golang/utils/request"
+	"github.com/ebcardoso/api-rest-golang/utils/request_contract"
 	"github.com/ebcardoso/api-rest-golang/utils/response"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -32,8 +33,18 @@ func NewAuth(configs *config.Config) *Auth {
 func (api *Auth) Signup(w http.ResponseWriter, r *http.Request) {
 	output := make(map[string]interface{})
 
+	//Post Params
 	var params request.SignupReq
 	json.NewDecoder(r.Body).Decode(&params)
+
+	//Validating Inputs
+	contract, err := request_contract.Validate(params)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.InvalidParams
+		output["errors"] = contract
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
 
 	//Check if the password are the same
 	if params.Password != params.PasswordConfirmation {
@@ -43,7 +54,7 @@ func (api *Auth) Signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Check if the user already exists
-	_, err := api.repository.GetUserByEmail(params.Email)
+	_, err = api.repository.GetUserByEmail(params.Email)
 	if err != nil {
 		if errors.Is(err, repository.ErrUserGet) {
 			output["message"] = api.configs.Translations.Auth.Signup.Errors.SaveUser
@@ -85,8 +96,18 @@ func (api *Auth) Signup(w http.ResponseWriter, r *http.Request) {
 func (api *Auth) Signin(w http.ResponseWriter, r *http.Request) {
 	output := make(map[string]interface{})
 
+	//Post Params
 	var params request.SigninReq
 	json.NewDecoder(r.Body).Decode(&params)
+
+	//Validating Inputs
+	contract, err := request_contract.Validate(params)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.InvalidParams
+		output["errors"] = contract
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
 
 	//Find user on BD
 	user, err := api.repository.GetUserByEmail(params.Email)
@@ -123,7 +144,7 @@ func (api *Auth) Signin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	output["message"] = api.configs.Translations.Auth.Signin.Success
-	output["accessToken"] = token
+	output["access_token"] = token
 
 	response.JsonRes(w, output, http.StatusOK)
 }
@@ -138,6 +159,15 @@ func (api *Auth) ForgotPasswordToken(w http.ResponseWriter, r *http.Request) {
 	//Post Params
 	var params request.ForgotPasswordReq
 	json.NewDecoder(r.Body).Decode(&params)
+
+	//Validating Inputs
+	contract, err := request_contract.Validate(params)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.InvalidParams
+		output["errors"] = contract
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
 
 	//Find user on DB
 	user, err := api.repository.GetUserByEmail(params.Email)
@@ -182,6 +212,15 @@ func (api *Auth) ResetPasswordConfirm(w http.ResponseWriter, r *http.Request) {
 	//Post Params
 	var params request.ResetPasswordReq
 	json.NewDecoder(r.Body).Decode(&params)
+
+	//Validating Inputs
+	contract, err := request_contract.Validate(params)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.InvalidParams
+		output["errors"] = contract
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
 
 	//Check if the password are the same
 	if params.Password != params.PasswordConfirmation {
