@@ -8,6 +8,7 @@ import (
 	"github.com/ebcardoso/api-rest-golang/app/repository"
 	"github.com/ebcardoso/api-rest-golang/app/types"
 	"github.com/ebcardoso/api-rest-golang/config"
+	"github.com/ebcardoso/api-rest-golang/utils/request"
 	"github.com/ebcardoso/api-rest-golang/utils/response"
 	"github.com/go-chi/chi/v5"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -28,15 +29,30 @@ func NewUsers(configs *config.Config) *Users {
 func (api *Users) GetListUsers(w http.ResponseWriter, r *http.Request) {
 	output := make(map[string]interface{})
 
-	items, err := api.repository.ListUsers()
+	paramPage := r.URL.Query().Get("page")
+	page, err := request.ParsePageNumber(paramPage)
+	if err != nil {
+		output["message"] = api.configs.Translations.Errors.ParsePage
+		response.JsonRes(w, output, http.StatusBadRequest)
+		return
+	}
+
+	items, err := api.repository.ListUsers(page)
 	if err != nil {
 		output["message"] = err.Error()
 		response.JsonRes(w, output, http.StatusInternalServerError)
 		return
 	}
 
-	output["content"] = items
-	response.JsonRes(w, output, http.StatusOK)
+	size, err := api.repository.GetCollectionSize()
+	if err != nil {
+		output["message"] = err.Error()
+		response.JsonRes(w, output, http.StatusInternalServerError)
+		return
+	}
+
+	options := []int64{int64(page), int64(len(items)), size} //page, page size, total elements
+	response.JsonPaginatedResponse(w, items, options)
 }
 
 func (api *Users) GetUserByID(w http.ResponseWriter, r *http.Request) {

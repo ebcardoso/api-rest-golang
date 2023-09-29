@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
@@ -43,10 +44,22 @@ func NewRepositoryUsers(configs *config.Config) *Users {
 	}
 }
 
-func (rep *Users) ListUsers() ([]types.User, error) {
+func (rep *Users) GetCollectionSize() (int64, error) {
+	size, err := rep.collection.CountDocuments(context.Background(), bson.D{})
+	if err != nil {
+		return 0, ErrUserFetch
+	}
+	return size, nil
+}
+
+func (rep *Users) ListUsers(page int) ([]types.User, error) {
 	items := []types.User{}
 
-	result, err := rep.collection.Find(context.Background(), bson.M{})
+	limit := int64(10)
+	skip := int64(page)*limit - limit
+
+	pageOptions := options.FindOptions{Skip: &skip, Limit: &limit}
+	result, err := rep.collection.Find(context.Background(), bson.M{}, &pageOptions)
 	if err != nil {
 		return nil, ErrUserList
 	}

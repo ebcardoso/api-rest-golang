@@ -46,3 +46,4 @@ users:
 errors:
   invalid_params: 'Invalid Params'
   parse_id: 'Invalid param id'
+  parse_page: 'Invalid param :page'

@@ -79,6 +79,7 @@ type Translations struct {
 	Errors struct {
 		InvalidParams string `yaml:"invalid_params"`
 		ParseId       string `yaml:"parse_id"`
+		ParsePage     string `yaml:"parse_page"`
 	} `yaml:"errors"`
 }
 
